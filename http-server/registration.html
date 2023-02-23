@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Form</title>
+  </head>
+  <body>
+    <div class="divForm">
+      <form id="form">
+        <h1>Registration Form</h1>
+        <div class="rowInput">
+          <label for="name">Name<sup>*</sup></label>
+          <br />
+          <input
+            class="inputStyle"
+            type="text"
+            required
+            placeholder="Enter name"
+            id="name"
+            name="name"
+          />
+        </div>
+        <div class="rowInput">
+          <label for="email">Email<sup>*</sup></label>
+          <br />
+          <input
+            class="inputStyle"
+            type="email"
+            required
+            placeholder="Enter email"
+            id="email"
+            name="email"
+          />
+        </div>
+        <div class="rowInput">
+          <label for="password">Password<sup>*</sup></label>
+          <br />
+          <input
+            class="inputStyle"
+            name="password"
+            required
+            type="password"
+            placeholder="Enter password"
+            id="password"
+          />
+        </div>
+        <div class="rowInput">
+          <label for="date">Date of Birth<sup>*</sup></label>
+          <br />
+          <input required class="inputStyle" type="date" id="dob" name="dob" />
+        </div>
+        <div class="rowInput">
+          <label for="toggle-check"
+            ><input
+              required
+              type="checkbox"
+              value="on"
+              id="toggle-check"
+              name="toggle-check"
+            />
+            Accept Terms & Conditions
+          </label>
+        </div>
+        <div class="rowInput">
+          <input type="submit" id="submit" />
+        </div>
+      </form>
+    </div>
+
+    <div class="table-div">
+      <h2>Entries</h2>
+      <table id="table">
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Dob</th>
+        <th>Accepted terms?</th>
+      </table>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

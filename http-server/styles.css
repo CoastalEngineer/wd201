@@ -1,0 +1,80 @@
+sup {
+  color: red;
+}
+
+.rowInput {
+  padding: 20px 0px 0px 0px; /* top right bottom left */
+}
+
+.inputStyle {
+  margin-top: 10px;
+  height: 2rem;
+  width: 100%;
+  border: 1px solid skyblue;
+  border-radius: 10px;
+  box-shadow: 5px 2px 5px #888888;
+  background-color: #f0eeed;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+input:invalid:focus {
+  border: 1px solid red;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid skyblue;
+}
+
+.divForm {
+  display: flex;
+  justify-content: center;
+
+  margin: auto;
+  background-color: white;
+  border-radius: 20px;
+  width: 35rem;
+  height: 35rem;
+  box-shadow: 5px 10px 5px #888888;
+}
+
+body {
+  background-color: #f0eeed;
+}
+
+#submit {
+  background-color: green;
+  color: white;
+  width: 100px;
+  height: 40px;
+  border: 0px solid transparent;
+  border-radius: 10px;
+}
+
+#toggle-check {
+  height: 15px;
+  width: 15px;
+}
+
+.table-div {
+  display: flex;
+  /* align-content: center; */
+  align-items: center;
+  justify-content: center;
+  width: 35rem;
+  height: auto;
+  min-height: 120px;
+  background-color: white;
+  border-radius: 25px;
+  box-shadow: 5px 10px 5px #888888;
+  margin: auto;
+  margin-top: 20px;
+  flex-direction: column;
+}
+
+#table {
+  width: 90%;
+  height: auto;
+  margin-bottom: 20px;
+}
