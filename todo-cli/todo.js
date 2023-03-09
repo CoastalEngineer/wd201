@@ -10,6 +10,7 @@ const todoList = () => {
   const overdue = () => {
     // Write the date check condition here and return the array
     // of overdue items accordingly.
+
     return all.filter((item) => {
       return item.dueDate < today;
     });
@@ -54,5 +55,7 @@ const todoList = () => {
     toDisplayableList,
   };
 };
+
+const today = new Date().toISOString().slice(0, 10);
 
 module.exports = todoList;
