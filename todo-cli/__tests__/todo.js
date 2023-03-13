@@ -23,7 +23,12 @@ describe("TodoList Test Suite", () => {
 
   test("Due today test", () => {
     var today = new Date();
-    expect(dueToday().length).toBe(1);
+    add({
+      title: "Today test",
+      completed: false,
+      dueDate: today.toISOString().slice(0, 10),
+    });
+    expect(dueToday().length).toBe(2);
   });
 
   test("Due Later test", () => {

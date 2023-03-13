@@ -38,7 +38,7 @@ const todoList = () => {
     // as per the format given above.
     return list
       .map((item) => {
-        return `${item.completed ? "[x]" : "[ ]"} ${item.title} ${
+        return `${item.completed ? "[x]" : "[ ]"} ${item.title.trim()} ${
           item.dueDate === today ? "" : item.dueDate
         }`;
       })
