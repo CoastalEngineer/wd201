@@ -40,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
             dueDate: {
               [Op.lt]: new Date(),
             },
-            completed: false,
           },
         });
         const todoList = todos
@@ -59,12 +58,11 @@ module.exports = (sequelize, DataTypes) => {
             dueDate: {
               [Op.eq]: new Date(),
             },
-            completed: false,
           },
         });
 
         const todoList = todos
-          .map((todoItem) => todoItem.displayableString())
+          .map((todoItem) => todoItem.displayTodayString())
           .join("\n");
         console.log(todoList);
       } catch (error) {
@@ -79,7 +77,6 @@ module.exports = (sequelize, DataTypes) => {
             dueDate: {
               [Op.gt]: new Date(),
             },
-            completed: false,
           },
         });
 
@@ -107,10 +104,15 @@ module.exports = (sequelize, DataTypes) => {
       return status;
     }
 
+    displayTodayString() {
+      return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${
+        this.title
+      }`.trim();
+    }
     displayableString() {
-      return `${this.id}. ${
-        this.completed ? "[x]" : "[ ]"
-      } ${this.title.trim()} ${this.dueDate}`;
+      return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${this.title} ${
+        this.dueDate
+      }`.trim();
     }
   }
   Todo.init(
