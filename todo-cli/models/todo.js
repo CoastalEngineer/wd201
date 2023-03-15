@@ -18,21 +18,31 @@ module.exports = (sequelize, DataTypes) => {
     static async showList() {
       console.log("My Todo list \n");
       console.log("Overdue");
-      await this.overdue();
-      //hmm
-      //let overDueItems = this.overdue();
-      //overDueItems.forEach((item) => console.log(item.displayableString()));
+
+      let overDueItems = await this.overdue();
+      overDueItems = overDueItems
+        .map((item) => item.displayableString())
+        .join("\n");
+      console.log(overDueItems);
       console.log("\n");
 
       console.log("Due Today");
       //hmm
-      await this.dueToday();
+      let dueTodayItems = await this.dueToday();
+      dueTodayItems = dueTodayItems
+        .map((item) => item.displayTodayString())
+        .join("\n");
+      console.log(overDueItems);
 
       console.log("\n");
 
       console.log("Due Later");
       //hmm
-      await this.dueLater();
+      let dueLaterItems = await this.dueLater();
+      dueLaterItems = dueLaterItems
+        .map((item) => item.displayableString())
+        .join("\n");
+      console.log(dueLaterItems);
     }
 
     static async overdue() {
@@ -45,10 +55,8 @@ module.exports = (sequelize, DataTypes) => {
           },
           order: [["id", "ASC"]], //idk if it still rejects :/
         });
-        const todoList = todos
-          .map((todoItem) => todoItem.displayableString())
-          .join("\n");
-        console.log(todoList);
+
+        return todos;
       } catch (error) {
         console.error(error);
       }
@@ -65,10 +73,7 @@ module.exports = (sequelize, DataTypes) => {
           order: [["id", "ASC"]],
         });
 
-        const todoList = todos
-          .map((todoItem) => todoItem.displayTodayString())
-          .join("\n");
-        console.log(todoList);
+        return todos;
       } catch (error) {
         console.error(error);
       }
@@ -85,11 +90,7 @@ module.exports = (sequelize, DataTypes) => {
           order: [["id", "ASC"]],
         });
 
-        const todoList = todos
-          .map((todoItem) => todoItem.displayableString())
-          .join("\n");
-
-        console.log(todoList);
+        return todos;
       } catch (error) {
         console.error(error);
       }
