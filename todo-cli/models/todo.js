@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Overdue");
 
       let overDueItems = await this.overdue();
+
       overDueItems = overDueItems
         .map((item) => item.displayableString())
         .join("\n");
@@ -29,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Due Today");
       //hmm
       let dueTodayItems = await this.dueToday();
+
       dueTodayItems = dueTodayItems
         .map((item) => item.displayableString())
         .join("\n");
@@ -39,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Due Later");
       //hmm
       let dueLaterItems = await this.dueLater();
+
       dueLaterItems = dueLaterItems
         .map((item) => item.displayableString())
         .join("\n");
@@ -111,16 +114,10 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     displayableString() {
-      let today = new Date();
-      if (this.dueDate === today) {
-        return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${
-          this.title
-        }`.trim();
-      } else {
-        return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${this.title} ${
-          this.dueDate
-        }`.trim();
-      }
+      var today = new Date().toISOString().slice(0, 10);
+      return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${this.title} ${
+        this.dueDate === today ? "" : this.dueDate
+      }`.trim();
     }
   }
   Todo.init(
