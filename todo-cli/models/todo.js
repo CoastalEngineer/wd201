@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
       //hmm
       await this.dueToday();
 
+      console.log("\n");
+
       console.log("Due Later");
       //hmm
       await this.dueLater();
