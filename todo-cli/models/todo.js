@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
               [Op.lt]: new Date(),
             },
           },
+          order: [["id", "ASC"]], //idk if it still rejects :/
         });
         const todoList = todos
           .map((todoItem) => todoItem.displayableString())
@@ -59,6 +60,7 @@ module.exports = (sequelize, DataTypes) => {
               [Op.eq]: new Date(),
             },
           },
+          order: [["id", "ASC"]],
         });
 
         const todoList = todos
@@ -78,6 +80,7 @@ module.exports = (sequelize, DataTypes) => {
               [Op.gt]: new Date(),
             },
           },
+          order: [["id", "ASC"]],
         });
 
         const todoList = todos
