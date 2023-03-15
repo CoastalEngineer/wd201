@@ -112,9 +112,15 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       let today = new Date();
-      return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${this.title} ${
-        this.dueDate === today ? this.dueDate : ""
-      }`.trim();
+      if (this.dueDate === today) {
+        return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${
+          this.title
+        }`.trim();
+      } else {
+        return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${this.title} ${
+          this.dueDate
+        }`.trim();
+      }
     }
   }
   Todo.init(
