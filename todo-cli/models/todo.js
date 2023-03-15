@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       //hmm
       let dueTodayItems = await this.dueToday();
       dueTodayItems = dueTodayItems
-        .map((item) => item.displayTodayString())
+        .map((item) => item.displayableString())
         .join("\n");
       console.log(overDueItems);
 
@@ -110,14 +110,10 @@ module.exports = (sequelize, DataTypes) => {
       return status;
     }
 
-    displayTodayString() {
-      return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${
-        this.title
-      }`.trim();
-    }
     displayableString() {
+      let today = new Date();
       return `${this.id}. ${this.completed ? "[x]" : "[ ]"} ${this.title} ${
-        this.dueDate
+        this.dueDate === today ? this.dueDate : ""
       }`.trim();
     }
   }
