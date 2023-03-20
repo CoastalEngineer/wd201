@@ -1,3 +1,5 @@
+/*eslint-disable no-unused-vars */
+
 const express = require("express");
 const app = express();
 const { Todo } = require("./models");
@@ -35,9 +37,11 @@ app.put("/todos/:id/markAsCompleted", async (request, response) => {
     return response.status(422).json(error);
   }
 });
-
 app.delete("/todos/:id", (request, response) => {
   console.log("Delete a todo by ID: ", request.params.id);
+  response.send("Delete!");
 });
 
 module.exports = app;
+
+/*eslint-disable no-unused-vars */
