@@ -4,11 +4,43 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet" />
-    <title>Document</title>
+    <title>To-Do Application</title>
   </head>
   <body>
-    <%- include('header.ejs') %> <%- include('todos.ejs') %> <%-
-    include('footer.ejs') %>
+    <div class="grid grid-cols-6">
+      <div class="col-start-3 col-span-2">
+        <%- include('header.ejs') %>
+        <form>
+          <div class="flex gap-2 py-4">
+            <div class="flex-auto">
+              <input
+                type="text"
+                class="border border-gray-600 text-sm text-gray-900 font-semibold w-full rounded p-2"
+                placeholder="What's Next?"
+                required
+              />
+            </div>
+            <div class="flex-auto">
+              <input
+                type="date"
+                placeholder="dd/mm/yyyy"
+                class="border border-gray-600 text-xs text-gray-900 font-semibold w-full rounded p-2 h-full"
+              />
+            </div>
+            <div class="flex-none">
+              <button
+                type="submit"
+                class="bg-green-600 text-white px-5 px-2 w-full h-full rounded font-medium mr-2 mb-2"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </form>
+        <%-include('todos.ejs') %>
+      </div>
+    </div>
   </body>
 </html>
