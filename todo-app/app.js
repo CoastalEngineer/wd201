@@ -7,17 +7,25 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.set("view engine", "ejs");
 
 app.get("/", async (request, response) => {
   const allTodos = await Todo.getAllTodos();
+  const todayItems = await Todo.dueToday();
+  const laterItems = await Todo.dueLater();
+  const overdueItems = await Todo.overdue();
+
   if (request.accepts("html")) {
     response.render("index", {
       allTodos,
+      todayItems,
+      laterItems,
+      overdueItems,
     });
   } else {
-    response.json({ allTodos });
+    response.json({ allTodos, todayItems, laterItems, overdueItems });
   }
 });
 
@@ -42,7 +50,7 @@ app.post("/todos", async (request, response) => {
       dueDate: request.body.dueDate,
     });
 
-    return response.json(todo);
+    return response.redirect("/");
   } catch (error) {
     console.log(error);
     return response.status(422).json(error); //unprocessable entity
