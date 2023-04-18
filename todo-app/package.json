@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "ejs": "^3.1.9",
     "eslint": "^8.36.0",
     "express": "^4.18.2",
@@ -31,5 +32,10 @@
       "eslint",
       "prettier --write ."
     ]
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
+    "win-node-env": "^0.6.1"
   }
 }
