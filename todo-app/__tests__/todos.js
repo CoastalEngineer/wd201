@@ -35,8 +35,8 @@ describe("Todo test suite", () => {
   });
 
   test("Mark Complete", async () => {
-    let res = await agent.get("/");
-    let csrfToken = extractCsrfToken(res);
+    var res = await agent.get("/");
+    var csrfToken = extractCsrfToken(res);
 
     await agent.post("/todos").send({
       title: "Buy Milk",
@@ -50,8 +50,8 @@ describe("Todo test suite", () => {
     const todayItemsCount = parsedResponse.todayItems.length;
     const latestTodo = parsedResponse.todayItems[todayItemsCount - 1];
 
-    res = await agent.get("/");
-    csrfToken = extractCsrfToken(res);
+    var res = await agent.get("/");
+    var csrfToken = extractCsrfToken(res);
 
     const markCompleteResponse = await agent
       .put(`/todos/${latestTodo.id}`)
@@ -64,9 +64,39 @@ describe("Todo test suite", () => {
     expect(parsedCompleteResponse.completed).toBe(true);
   });
 
+  test("Mark Incomplete", async () => {
+    var res = await agent.get("/");
+    var csrfToken = extractCsrfToken(res);
+
+    await agent.post("/todos").send({
+      title: "Buy Milk",
+      dueDate: new Date().toISOString(),
+      completed: true,
+      _csrf: csrfToken,
+    });
+
+    const todoResponse = await agent.get("/").set("Accept", "application/json");
+    const parsedResponse = JSON.parse(todoResponse.text);
+    const todayItemsCount = parsedResponse.todayItems.length;
+    const latestTodo = parsedResponse.todayItems[todayItemsCount - 1];
+
+    var res = await agent.get("/");
+    var csrfToken = extractCsrfToken(res);
+
+    const markCompleteResponse = await agent
+      .put(`/todos/${latestTodo.id}`)
+      .send({
+        _csrf: csrfToken,
+        completed: false,
+      });
+
+    const parsedCompleteResponse = JSON.parse(markCompleteResponse.text);
+    expect(parsedCompleteResponse.completed).toBe(false);
+  });
+
   test("Delete test", async () => {
-    res = await agent.get("/");
-    csrfToken = extractCsrfToken(res);
+    var res = await agent.get("/");
+    var csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
       title: "Item to Delete",
       dueDate: new Date().toISOString(),
@@ -79,8 +109,8 @@ describe("Todo test suite", () => {
     const dueTodayCount = parsedResponse.todayItems.length;
     const latestTodo = parsedResponse.todayItems[dueTodayCount - 1];
     const todoID = latestTodo.id;
-    res = await agent.get("/");
-    csrfToken = extractCsrfToken(res);
+    var res = await agent.get("/");
+    var csrfToken = extractCsrfToken(res);
     const deletedResponse = await agent.delete(`/todos/${todoID}`).send({
       _csrf: csrfToken,
     });

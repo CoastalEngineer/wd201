@@ -35,7 +35,6 @@
     ]
   },
   "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "win-node-env": "^0.6.1"
+    "cookie-parser": "^1.4.6"
   }
 }
