@@ -9,17 +9,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Todo.belongsTo(models.User, {
+        foreignKey: "userId",
+      });
     }
 
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate, userId }) {
+      return this.create({
+        userId: userId,
+        title: title,
+        dueDate: dueDate,
+        completed: false,
+      });
     }
 
-    static async getAllTodos() {
-      return this.findAll();
+    static async getAllTodos(userId) {
+      return this.findAll({
+        where: {
+          userId,
+        },
+      });
     }
 
-    static async overdue() {
+    static async overdue(userId) {
       try {
         return this.findAll({
           where: {
@@ -27,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
               [Op.lt]: new Date(),
             },
             completed: false,
+            userId,
           },
           order: [["id", "ASC"]], //idk if it still rejects :/
         });
@@ -35,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    static async dueToday() {
+    static async dueToday(userId) {
       try {
         return this.findAll({
           where: {
@@ -43,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
               [Op.eq]: new Date(),
             },
             completed: false,
+            userId,
           },
           order: [["id", "ASC"]],
         });
@@ -51,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    static async dueLater() {
+    static async dueLater(userId) {
       try {
         return this.findAll({
           where: {
@@ -59,6 +73,7 @@ module.exports = (sequelize, DataTypes) => {
               [Op.gt]: new Date(),
             },
             completed: false,
+            userId, //shorthand notation for userId: userId, .
           },
           order: [["id", "ASC"]],
         });
@@ -67,11 +82,12 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    static async completed() {
+    static async completed(userId) {
       try {
         return this.findAll({
           where: {
             completed: true,
+            userId,
           },
         });
       } catch (error) {
@@ -87,8 +103,8 @@ module.exports = (sequelize, DataTypes) => {
       return this.update({ completed: !this.completed });
     }
 
-    static async remove(id) {
-      return this.destroy({ where: { id: id } });
+    static async remove(id, userId) {
+      return this.destroy({ where: { id: id, userId } });
     }
   }
   Todo.init(
