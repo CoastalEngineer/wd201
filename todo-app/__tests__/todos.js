@@ -86,7 +86,7 @@ describe("Todo test suite", () => {
       .get("/todos")
       .set("Accept", "application/json");
     const parsedResponse = JSON.parse(todoResponse.text);
-    console.log(`Todo Response: ${todoResponse.text}`);
+    // console.log(`Todo Response: ${todoResponse.text}`);
     const todayItemsCount = parsedResponse.todayItems.length;
     const latestTodo = parsedResponse.todayItems[todayItemsCount - 1];
 
