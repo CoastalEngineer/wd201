@@ -167,7 +167,7 @@ app.get(
       const completedItems = await Todo.completed(loggedInUser);
 
       if (request.accepts("html")) {
-        response.render("renderTodos", {
+        response.render("todos", {
           allTodos,
           todayItems,
           laterItems,
