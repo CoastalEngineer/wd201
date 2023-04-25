@@ -6,14 +6,16 @@ var tinyCsrf = require("tiny-csrf");
 var cookieParser = require("cookie-parser");
 const { Todo, User } = require("./models");
 const bodyParser = require("body-parser");
-const path = require("path");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const connectEnsureLogin = require("connect-ensure-login");
 const session = require("express-session"); //session handling
+const flash = require("connect-flash");
+const path = require("path");
 const localStrategy = require("passport-local");
 const saltRounds = 10;
 
+app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("shh! some secret string"));
@@ -28,6 +30,13 @@ app.use(
     },
   })
 );
+
+app.use(flash());
+
+app.use(function (request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,11 +54,11 @@ passport.use(
           if (result) {
             return done(null, user);
           } else {
-            return done("Invalid Password");
+            return done(null, false, { message: "Invalid password" });
           }
         })
         .catch((error) => {
-          return error;
+          return done(error);
         });
     }
   )
@@ -86,24 +95,33 @@ app.get("/signup", async (request, response) => {
 
 app.post("/users", async (request, response) => {
   //create new user
-  const hashedPassword = await bcrypt.hash(request.body.password, saltRounds);
   // response.render("signup", { csrfToken: request.csrfToken() });
-  try {
-    const user = await User.create({
-      firstName: request.body.firstName,
-      lastName: request.body.lastName,
-      email: request.body.email,
-      password: hashedPassword,
-    });
+  const firstName = request.body.firstName;
+  const email = request.body.email;
+  const password = request.body.password;
+  if (firstName.length == 0 || email.length == 0 || password.length == 0) {
+    console.log("Credentials Empty!");
+    request.flash("error", `Missing Credentials`);
+    response.redirect("/signup");
+  } else {
+    const hashedPassword = await bcrypt.hash(request.body.password, saltRounds);
+    try {
+      const user = await User.create({
+        firstName: firstName,
+        lastName: request.body.lastName,
+        email: email,
+        password: hashedPassword,
+      });
 
-    request.login(user, (err) => {
-      if (err) {
-        console.error(err);
-      }
-      response.redirect("/todos");
-    });
-  } catch (error) {
-    console.log(error);
+      request.login(user, (err) => {
+        if (err) {
+          console.error(err);
+        }
+        response.redirect("/todos");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 });
 
@@ -113,9 +131,13 @@ app.get("/login", (request, response) => {
 
 app.post(
   "/session",
-  passport.authenticate("local", { failureRedirect: "/login" }),
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
   (request, response) => {
-    console.log(request.user);
+    // console.log(request.user);
+
     response.redirect("/todos");
   }
 );
@@ -135,8 +157,9 @@ app.get(
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
     // response.send("Todo List");
-    const loggedInUser = request.user.id;
     try {
+      const loggedInUser = request.user.id;
+      console.log(`User logged in with ID: ${loggedInUser}`);
       const allTodos = await Todo.getAllTodos(loggedInUser);
       const todayItems = await Todo.dueToday(loggedInUser);
       const laterItems = await Todo.dueLater(loggedInUser);
@@ -174,17 +197,25 @@ app.post(
   async (request, response) => {
     // console.log("Creating a todo", request.body);
     // console.log(request.user);
-    try {
-      const todo = await Todo.addTodo({
-        title: request.body.title,
-        dueDate: request.body.dueDate,
-        userId: request.user.id,
-      });
+    const title = request.body.title;
+    const dueDate = request.body.dueDate;
 
-      return response.redirect("/todos");
-    } catch (error) {
-      console.log(error);
-      return response.status(422).json(error); //unprocessable entity
+    if (title.length == 0 || dueDate.length != 10) {
+      request.flash("error", `Fill in the proper details`);
+      response.redirect("/todos");
+    } else {
+      try {
+        const todo = await Todo.addTodo({
+          title: title,
+          dueDate: dueDate,
+          userId: request.user.id,
+        });
+
+        return response.redirect("/todos");
+      } catch (error) {
+        console.log(error);
+        return response.status(422).json(error); //unprocessable entity
+      }
     }
   }
 );

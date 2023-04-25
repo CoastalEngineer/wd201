@@ -62,7 +62,7 @@ describe("Todo test suite", () => {
     const csrfToken = extractCsrfToken(res);
     const response = await agent.post("/todos").send({
       title: "Buy Milk",
-      dueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString().substring(0, 10),
       completed: false,
       _csrf: csrfToken,
     });
@@ -77,7 +77,7 @@ describe("Todo test suite", () => {
 
     await agent.post("/todos").send({
       title: "Buy Milk",
-      dueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString().substring(0, 10),
       completed: false,
       _csrf: csrfToken,
     });
@@ -86,6 +86,7 @@ describe("Todo test suite", () => {
       .get("/todos")
       .set("Accept", "application/json");
     const parsedResponse = JSON.parse(todoResponse.text);
+    console.log(`Todo Response: ${todoResponse.text}`);
     const todayItemsCount = parsedResponse.todayItems.length;
     const latestTodo = parsedResponse.todayItems[todayItemsCount - 1];
 
@@ -111,7 +112,7 @@ describe("Todo test suite", () => {
 
     await agent.post("/todos").send({
       title: "Buy Milk",
-      dueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString().substring(0, 10),
       completed: true,
       _csrf: csrfToken,
     });
@@ -144,7 +145,7 @@ describe("Todo test suite", () => {
     var csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
       title: "Item to Delete",
-      dueDate: new Date().toISOString(),
+      dueDate: new Date().toISOString().substring(0, 10),
       completed: false,
       _csrf: csrfToken,
     });
